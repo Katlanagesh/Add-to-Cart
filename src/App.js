@@ -1,25 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import Header from "./components/Header";
+import Navbar from "./components/Navbar";
+import Product from "./components/Product";
+import Footer from "./components/Footer";
+import data from "./data.json";
 
-function App() {
+import { useState } from "react";
+
+export default function App() {
+  const [totalitems, setTotalitems] = useState([]);
+  const [product, setProduct] = useState(data);
+
+  const Update = (desc, id) => {
+    let tempdes = { id, desc };
+    setTotalitems([...totalitems, tempdes]);
+    let index = product.findIndex((obj) => obj.id === id);
+    let temp = product;
+    temp[index].isvisible = false;
+    setProduct([...temp]);
+  };
+  const remove = (id) => {
+    setTotalitems(totalitems.filter((value) => value.id !== id));
+    let index = product.findIndex((obj) => obj.id === id);
+    let temps = product;
+    temps[index].isvisible = true;
+    setProduct([...temps]);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Navbar totalitems={totalitems} />
+      <Header />
+
+      <Product data={data} Update={Update} remove={remove} />
+      <Footer />
     </div>
   );
 }
-
-export default App;
